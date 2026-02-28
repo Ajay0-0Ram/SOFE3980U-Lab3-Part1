@@ -10,32 +10,40 @@ public class Binary
 	/**
 	* A constructor that generates a binary object.
 	*
-	* @param number a String of the binary values. It should conatins only zeros or ones with any length and order. otherwise, the value of "0" will be stored.   Trailing zeros will be excluded and empty string will be considered as zero.
+	* @param number a String of the binary values. It should contain only zeros or ones with any length and order. otherwise, the value of "0" will be stored.   Trailing zeros will be excluded and empty string will be considered as zero.
 	*/
-    public Binary(String number) {
+	public Binary(String number) {
+		if (number == null || number.isEmpty()) {
+			this.number = "0"; // Default to "0" for null or empty input
+			return;
+		}
+	
+		// Validate the binary string (only '0' or '1' allowed)
 		for (int i = 0; i < number.length(); i++) {
-			// check each character if it's not 0 or 1
-			char ch=number.charAt(i);
-			if(ch!='0' && ch!='1') {
-				number="0"; // if not store "0" and end the function
+			char ch = number.charAt(i);
+			if (ch != '0' && ch != '1') {
+				this.number = "0"; // Default to "0" for invalid input
 				return;
 			}
 		}
-		// remove any trailing zeros
+	
+		// Remove leading zeros
 		int beg;
 		for (beg = 0; beg < number.length(); beg++) {
-			if (number.charAt(beg)!='0')
+			if (number.charAt(beg) != '0') {
 				break;
+			}
 		}
-		//beg has the index of the first non zero digit in the number
-		this.number=number.substring(beg); // exclude the trailing zeros if any
+	
+		// If all digits are '0', ensure number is "0"
+		this.number = (beg == number.length()) ? "0" : number.substring(beg);
+	
 		// uncomment the following code
-		
-		if(this.number=="") { // replace empty strings with a single zero
-			this.number="0";
+		if (this.number.isEmpty()) { // replace empty strings with a single zero
+			this.number = "0";
 		}
-		
-    }
+  		
+	}
 	/**
 	* Return the binary value of the variable
 	*
@@ -79,4 +87,59 @@ public class Binary
 		return result;
 		
 	}
+
+    //ADDED FUNCTIONS
+    //OR
+    public static Binary or(Binary num1, Binary num2)
+    {
+        int maxLen = Math.max(num1.number.length(), num2.number.length());
+        String result = "";
+
+        for (int i = 0; i < maxLen; i++) {
+            int bit1 = (i < num1.number.length())
+                    ? (num1.number.charAt(num1.number.length() - 1 - i) == '1' ? 1 : 0)
+                    : 0;
+
+            int bit2 = (i < num2.number.length())
+                    ? (num2.number.charAt(num2.number.length() - 1 - i) == '1' ? 1 : 0)
+                    : 0;
+
+            int orBit = bit1 | bit2;
+            result = (orBit == 1 ? "1" : "0") + result;
+        }
+
+        return new Binary(result);
+    }
+
+
+
+    //AND
+    public static Binary and(Binary num1, Binary num2)
+    {
+        // Implementation of AND operation
+        int maxLen = Math.max(num1.number.length(), num2.number.length());
+        String result = "";
+        for (int i = 0; i < maxLen; i++) {
+            int bit1 = (i < num1.number.length()) ? (num1.number.charAt(num1.number.length() - 1 - i) == '1' ? 1 : 0) : 0;
+            int bit2 = (i < num2.number.length()) ? (num2.number.charAt(num2.number.length() - 1 - i) == '1' ? 1 : 0) : 0;
+            int andBit = bit1 & bit2;
+            result = ((andBit == 0) ? "0" : "1") + result;
+        }
+        return new Binary(result);
+    }
+
+    //MULTIPLY
+    
+    public static Binary multiply(Binary num1, Binary num2)
+    {
+        // Implementation of multiplication operation
+        Binary result = new Binary("0");
+        for (int i = 0; i < num2.number.length(); i++) {
+            if (num2.number.charAt(num2.number.length() - 1 - i) == '1') {
+                String shiftedNum1 = num1.number + "0".repeat(i);
+                result = Binary.add(result, new Binary(shiftedNum1));
+            }
+        }
+        return result;
+    }
 }	

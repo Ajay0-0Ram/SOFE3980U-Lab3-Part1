@@ -1,9 +1,9 @@
 package com.ontariotechu.sofe3980U;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -29,6 +29,15 @@ public class BinaryController {
 		{
 			case "+":
 				model.addAttribute("result", Binary.add(number1,number2).getValue());
+				return "result";
+			case "*":
+				model.addAttribute("result", Binary.multiply(number1,number2).getValue());
+				return "result";
+			case "&":
+				model.addAttribute("result", Binary.and(number1,number2).getValue());
+				return "result";
+			case "|":
+				model.addAttribute("result", Binary.or(number1,number2).getValue());
 				return "result";
 			default:
 				return "Error";
