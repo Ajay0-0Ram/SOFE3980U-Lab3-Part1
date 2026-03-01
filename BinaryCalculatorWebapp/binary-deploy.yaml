@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: binarycalculator-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: binarycalculator
+  template:
+    metadata:
+      labels:
+        app: binarycalculator
+    spec:
+      containers:
+      - name: binarycalculator
+        # This points to the image you pushed to your Google Cloud Registry
+        image: us-central1-docker.pkg.dev/sofe3980u-lab3-part1-488822/sofe3980u/binarycalculator
+        ports:
+        - containerPort: 8080
